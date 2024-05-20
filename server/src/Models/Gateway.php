@@ -145,10 +145,7 @@ class Gateway extends StorefrontModel
     {
         return $this->type === 'qpay';
     }
-    public function getIsMPESAGatewayAttribute()
-    {
-        return $this->type === 'MPESA';
-    }
+
     /**
      * Generates a new cash/cash on delivery gateway.
      */
