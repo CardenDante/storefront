@@ -43,10 +43,10 @@
         "publish:github": "npm config set '@fleetbase:registry' https://npm.pkg.github.com/ && npm publish"
     },
     "dependencies": {
+        "@babel/core": "^7.23.2",
         "@fleetbase/ember-core": "^0.2.9",
         "@fleetbase/ember-ui": "^0.2.14",
         "@fleetbase/fleetops-data": "^0.1.15",
-        "@babel/core": "^7.23.2",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -57,12 +57,12 @@
         "ember-wormhole": "^0.6.0"
     },
     "devDependencies": {
-        "@fleetbase/intl-lint": "^0.0.1",
         "@babel/eslint-parser": "^7.22.15",
         "@babel/plugin-proposal-decorators": "^7.23.2",
         "@ember/optional-features": "^2.0.0",
         "@ember/test-helpers": "^3.2.0",
         "@embroider/test-setup": "^3.0.2",
+        "@fleetbase/intl-lint": "^0.0.1",
         "@glimmer/component": "^1.1.2",
         "@glimmer/tracking": "^1.1.2",
         "broccoli-asset-rev": "^3.0.0",
