@@ -41,6 +41,7 @@ export default class SettingsGatewaysController extends Controller {
     @action editGateway(gateway, options = {}) {
         const schemas = getGatewaySchemas();
         const schemaOptions = Object.keys(schemas);
+        const gatewayKeys = Object.keys(gatewaySchemas);
 
         this.modalsManager.show('modals/create-gateway', {
             title: this.intl.t('storefront.settings.gateways.edit-payment-gateway'),
