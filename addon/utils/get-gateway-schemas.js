@@ -7,7 +7,7 @@ export default function getGatewaySchemas() {
             ideal_payment: false,
             fpx_payment: false,
         },
-        mpesa: { 
+        mpesa_stk: { 
             merchant_id: '',
             pass_key: '',
             consumer_key: '',
@@ -36,7 +36,5 @@ export default function getGatewaySchemas() {
         },
     };
 
-    // return schemas;
-    return Object.keys(schemas);
-
+    return schemas;
 }

@@ -24,6 +24,7 @@ use Fleetbase\Storefront\Models\Store;
 use Fleetbase\Storefront\Models\StoreLocation;
 use Fleetbase\Storefront\Notifications\StorefrontOrderPreparing;
 use Fleetbase\Storefront\Support\QPay;
+use Fleetbase\Storefront\Support\MpesaService;
 use Fleetbase\Storefront\Support\Storefront;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -71,6 +72,10 @@ class CheckoutController extends Controller
             return static::initializeStripeCheckout($customer, $gateway, $serviceQuote, $cart, $checkoutOptions);
         }
 
+        if ($gateway->code === 'mpesa_stk') {
+            return static::initializeMpesaSTKCheckout($customer, $gateway, $serviceQuote, $cart, $checkoutOptions);
+        }
+
         // handle checkout initialization based on gateway
         if ($gateway->isQpayGateway) {
             return static::initializeQpayCheckout($customer, $gateway, $serviceQuote, $cart, $checkoutOptions);
@@ -78,7 +83,38 @@ class CheckoutController extends Controller
 
         return response()->error('Unable to initialize checkout!');
     }
+public static function initializeMpesaSTKCheckout(Contact $customer, Gateway $gateway, ServiceQuote $serviceQuote, Cart $cart, $checkoutOptions)
+    {
+        $mpesaConfig = $gateway->config->mpesa_stk;
+        $mpesaService = new MpesaService($mpesaConfig);
 
+        $amount = static::calculateCheckoutAmount($cart, $serviceQuote, $checkoutOptions);
+        $currency = $cart->currency ?? session('storefront_currency');
+        $isPickup = $checkoutOptions['is_pickup'];
+
+        $mpesaResponse = $mpesaService->initiateSTKPush($customer, $amount, $currency, $checkoutOptions);
+
+        $checkout = Checkout::create([
+            'company_uuid' => session('company'),
+            'store_uuid' => session('storefront_store'),
+            'network_uuid' => session('storefront_network'),
+            'cart_uuid' => $cart->uuid,
+            'gateway_uuid' => $gateway->uuid,
+            'service_quote_uuid' => $serviceQuote->uuid,
+            'owner_uuid' => $customer->uuid,
+            'owner_type' => 'fleet-ops:contact',
+            'amount' => $amount,
+            'currency' => $currency,
+            'is_pickup' => $isPickup,
+            'options' => $checkoutOptions,
+            'cart_state' => $cart->toArray(),
+        ]);
+
+        return response()->json([
+            'mpesaResponse' => $mpesaResponse,
+            'token' => $checkout->token,
+        ]);
+    }
     public static function initializeCashCheckout(Contact $customer, Gateway $gateway, ServiceQuote $serviceQuote, Cart $cart, $checkoutOptions)
     {
         // check if pickup order
