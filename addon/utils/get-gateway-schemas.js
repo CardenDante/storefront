@@ -36,5 +36,7 @@ export default function getGatewaySchemas() {
         },
     };
 
-    return schemas;
+    // return schemas;
+    return Object.keys(schemas);
+
 }
