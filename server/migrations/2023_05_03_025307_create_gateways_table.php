@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -30,6 +30,11 @@ return new class() extends Migration {
             $table->json('config')->nullable();
             $table->string('return_url')->nullable();
             $table->string('callback_url')->nullable();
+            // Add columns specific to M-Pesa configuration
+            $table->string('mpesa_merchant_id')->nullable();
+            $table->string('mpesa_pass_key')->nullable();
+            $table->string('mpesa_consumer_key')->nullable();
+            $table->string('mpesa_consumer_secret')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
